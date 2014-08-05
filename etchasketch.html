@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+
+<style>
+	#container {
+		width: 960px;
+		height: 960px;
+		
+		margin:0 auto;
+
+	}
+
+	#controls {
+		height: 30px;
+		width: 240px;
+		margin: auto;
+		border: 1px solid lightgray;
+		padding: 10px;
+		border-radius: 5px;
+	}
+
+	.grid {
+		border: 1px solid #d3d3d3;
+		height:43px;
+		width:43px;
+		float:left;
+		background-color: rgb(255,255,255);
+	}
+
+	.black {
+		background-color: black;
+		/*opacity:.1;*/
+	}
+
+	button {
+
+		background-color: lightblue;
+		font-family: arial;
+		font-size: 15px;
+		width: 80px;
+		height: 30px;
+		border-radius: 5px;
+		border: 1px solid  #dcdcdc;
+		/*box-shadow:inset 0px 1px 1px 0px #ffffff;*/
+		text-shadow:1px 1px 0px #ffffff;
+
+	}
+	span {
+
+		font-family: arial;
+		font-size: 15px;
+	}
+
+	input {
+    	width: 50px;
+    	border-radius: 3px;
+	}
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script>
+
+$(document).ready(function(){
+	
+	var containerSize = 960;
+	makeGrid(20);
+	
+	function hexToRgb(hex) {
+	    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+	    return result ? {
+	        r: parseInt(result[1], 16),
+	        g: parseInt(result[2], 16),
+	        b: parseInt(result[3], 16)
+	    } : null;
+	}
+
+	function makeGrid(gridNum) {
+		var cont = $("#container");
+		
+		for(i=0;i<Math.pow(gridNum,2);i++) {
+			if(i<gridNum) {
+				colLabel = i+1;
+			} else {
+				colLabel = "";
+			}
+			if(i%gridNum===0 && i>=gridNum) {
+				rowLabel = Math.floor(i/gridNum) + 1;
+			} else {
+				rowLabel = "";
+			}
+
+			$(cont).append("<div class='grid'></div>");
+		}
+		var gridSize = Math.floor(containerSize/(gridNum))-2;
+		$(".grid").css({"height":gridSize, "width":gridSize});
+	}
+
+	$("div").on("mouseenter", ".grid", function(){
+		
+		if($(this).css("background-color")==="rgb(255, 255, 255)") {
+			r = Math.round(Math.random()*255);
+			g = Math.round(Math.random()*255);
+			b = Math.round(Math.random()*255);
+		} else {
+			var sub = $(this).css("background-color").substr(4);
+			sub = sub.substr(0,  sub.length - 1);
+			var subArray = sub.split(",");
+
+			r = Math.round(+subArray[0]*(0.9));
+			g = Math.round(+subArray[1]*(0.9));
+			b = Math.round(+subArray[2]*(0.9));
+		}
+
+		$(this).css({"background-color":"rgb(" + r + "," + g + "," + b + ")"});
+		//$(this).addClass('black');
+		
+	});
+
+	$("button").on("click",  function() {
+		gridNum = +$("#size").val();
+		$(".grid").remove();
+		makeGrid(gridNum);
+	});
+
+});
+
+
+</script>
+
+</head>
+
+<body>
+	<div id="controls">
+		<span id="label">Enter grid size:</span> 
+		<input type="text" id="size"></input>
+		<button>Make It!</button>		
+	</div>
+	<br/>
+	<div id="container"></div>
+
+</body>
+</html>
