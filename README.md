@@ -1,4 +1,4 @@
-etch-a-sketch
+etch-a-sketch - html, css, js all in one file
 =============
 
 Odin Etch a Sketch
